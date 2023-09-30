@@ -23,9 +23,6 @@ consecutive_days_threshold = 7
 min_shift_interval = timedelta(hours=1)
 max_shift_hours = timedelta(hours=14)
 
-# Store results in a list
-results = []
-
 # Process the data
 for entry in data:
     name = entry['Employee Name']
@@ -37,8 +34,7 @@ for entry in data:
     if entry['Time'] != '':
         consecutive_days[name].add(entry['Time'].date())
         if len(consecutive_days[name]) >= consecutive_days_threshold:
-            result = f"{name} has worked for {len(consecutive_days[name])} consecutive days."
-            results.append(result)
+            print(f"{name} has worked for {len(consecutive_days[name])} consecutive days.")
 
     # Calculate shift duration
     if entry['Time'] != '' and entry['Time Out'] != '':
@@ -47,16 +43,10 @@ for entry in data:
 
     # Check for short shift intervals
     if entry['Time'] != '' and entry['Time Out'] != '' and shift_duration < min_shift_interval:
-        result = f"{name} has less than 10 hours between shifts on {entry['Time'].date()}."
-        results.append(result)
+        print(f"{name} has less than 10 hours between shifts on {entry['Time'].date()}.")
 
     # Check for long shifts
     if shift_hours[name] > max_shift_hours:
-        result = f"{name} has worked for more than 14 hours on {entry['Time'].date()}."
-        results.append(result)
+        print(f"{name} has worked for more than 14 hours on {entry['Time'].date()}.")
 
-# Write results to a CSV file
-with open('results.csv', 'w', newline='') as result_file:
-    writer = csv.writer(result_file)
-    writer.writerow(['Result'])
-    writer.writerows([[result] for result in results])
+
